@@ -65,13 +65,23 @@ else
   echo "==> Keeping existing $ENV_FILE"
 fi
 
+port="$(grep -E '^LT_PORT=' "$ENV_FILE" | cut -d= -f2)"
+port="${port:-8000}"
+
 echo "==> Installing systemd unit"
 install -m 644 "$SRC_DIR/deploy/localtranslater.service" "/etc/systemd/system/$SERVICE.service"
 systemctl daemon-reload
 systemctl enable "$SERVICE" >/dev/null
-systemctl restart "$SERVICE"
-
-port="$(grep -E '^LT_PORT=' "$ENV_FILE" | cut -d= -f2)"
+# Stop our own instance first so that any remaining listener on the port belongs to something else.
+systemctl stop "$SERVICE" 2>/dev/null || true
+if ! python3 -c 'import socket, sys; socket.create_server(("0.0.0.0", int(sys.argv[1]))).close()' "$port" 2>/dev/null; then
+  echo >&2
+  echo "Port $port is already used by another program:" >&2
+  command -v ss >/dev/null && ss -ltnpH "sport = :$port" >&2
+  echo "Set LT_PORT in $ENV_FILE to a free port, then run this script again." >&2
+  exit 1
+fi
+systemctl start "$SERVICE"
 echo
 systemctl --no-pager --lines=0 status "$SERVICE" || true
 echo

@@ -121,6 +121,7 @@ sudo ./deploy/install.sh      # 既存の /etc/localtranslater.env はそのま�
 - **最初の翻訳だけ遅い**: モデルの読み込みに時間がかかっています。`LT_KEEP_ALIVE` を長くすると、読み込み直しが減ります。
 - **翻訳に思考過程が混ざる / 出力が始まるまで遅い**: `LT_THINK=false` を試してください。
 - **他の端末から開けない**: ファイアウォールの設定と、`LT_HOST=0.0.0.0` になっているかを確認してください。
+- **ポートが他のサービスと重なっている**(ログに `address already in use`): `/etc/localtranslater.env` の `LT_PORT` を空いているポート(`sudo ss -ltnp 'sport = :8080'` で何も出なければ空き)に変えて `sudo systemctl restart localtranslater` してください。ファイアウォールの許可ポートも合わせて変更します。`install.sh` は、ポートが使用中ならサービスを起動せずに止まります。
 
 ## セキュリティについて
 
