@@ -1,0 +1,24 @@
+[Unit]
+Description=LocalTranslater (Ollama translation web UI)
+After=network-online.target ollama.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=localtranslater
+Group=localtranslater
+WorkingDirectory=/opt/localtranslater
+EnvironmentFile=/etc/localtranslater.env
+ExecStart=/opt/localtranslater/.venv/bin/uvicorn app.main:app --host ${LT_HOST} --port ${LT_PORT} --no-access-log
+Restart=on-failure
+RestartSec=3
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectControlGroups=true
+
+[Install]
+WantedBy=multi-user.target

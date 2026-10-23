@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#2563eb">
+  <title>LocalTranslater</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <h1>LocalTranslater</h1>
+    <div class="topbar-actions">
+      <select id="ui-lang" aria-label="UI language">
+        <option value="auto" data-i18n="uiLangAuto"></option>
+        <option value="ja">日本語</option>
+        <option value="en">English</option>
+        <option value="zh">中文</option>
+      </select>
+      <button id="logout" class="link-button" hidden data-i18n="logout"></button>
+    </div>
+  </header>
+
+  <main>
+    <section id="login-view" class="card login" hidden>
+      <form id="login-form">
+        <label for="password" data-i18n="password"></label>
+        <input id="password" type="password" autocomplete="current-password" required>
+        <button type="submit" class="primary" data-i18n="login"></button>
+        <p id="login-error" class="error" role="alert"></p>
+      </form>
+    </section>
+
+    <section id="app-view" hidden>
+      <div class="lang-bar">
+        <select id="source" aria-label="source language"></select>
+        <button id="swap" class="icon-button" type="button" data-i18n-title="swap" aria-label="swap">⇄</button>
+        <select id="target" aria-label="target language"></select>
+      </div>
+
+      <div class="panes">
+        <div class="pane card">
+          <textarea id="input" data-i18n-placeholder="inputPlaceholder" spellcheck="false"></textarea>
+          <div class="pane-footer">
+            <span id="char-count" class="muted"></span>
+            <button id="clear" class="link-button" type="button" data-i18n="clear"></button>
+          </div>
+        </div>
+        <div class="pane card">
+          <div id="output" class="output" aria-live="polite"></div>
+          <div class="pane-footer">
+            <span id="status" class="muted"></span>
+            <button id="copy" class="link-button" type="button" data-i18n="copy"></button>
+          </div>
+        </div>
+      </div>
+
+      <details id="instruction-box" class="card instruction">
+        <summary data-i18n="instruction"></summary>
+        <textarea id="instruction" rows="3" data-i18n-placeholder="instructionPlaceholder"></textarea>
+      </details>
+
+      <div class="actions">
+        <button id="translate" class="primary" type="button" data-i18n="translate"></button>
+        <button id="stop" type="button" hidden data-i18n="stop"></button>
+      </div>
+      <p id="model" class="muted small"></p>
+    </section>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
